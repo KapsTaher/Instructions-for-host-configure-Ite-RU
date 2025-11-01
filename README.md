@@ -38,17 +38,17 @@ vim ./zabbix_agent2.conf
 - Закомментировать `ServerActive=127.0.0.1`
 - Заменить `Hostname=Zabbix server` на значение из таблицы (либо на значение из команды `hostname -f`)
 
-# Шаг 4: Перенос программы netmath на хост и настройка прав
+# Шаг 3: Перенос программы netmath на хост и настройка прав
 - Через WinSCP перенести программу в предварительно созданную `mkdir zabbix_dir` субдиректорию пользователя plNNNN
 - Создать директорию для программы `mkdir /usr/sbin/zabbix-agent2-plugin`
-- Перенести netmath в директорию `/usr/sbin/zabbix-agent2-plugin`, например, из созданной субдиректории `mv` или `cp ./zabbix-agent2-plugin-netmath /usr/sbin/zabbix-agent2-plugin/`
+- Перенести zabbix-agent2-plugin-netmath в директорию `/usr/sbin/zabbix-agent2-plugin`, например, из созданной субдиректории `mv ./zabbix-agent2-plugin-netmath /usr/sbin/zabbix-agent2-plugin/`
 - Изменить полномочия программы `chmod 755 /usr/sbin/zabbix-agent2-plugin/zabbix-agent2-plugin-netmath`
-- Перейти в директорию `cd /etc/zabbix/zabbix_agent2.d/plugins.d/` и скопировать в неё необходимые UserParameters.conf-файлы по образцу из сконфигурированной системы
+- Перейти в директорию `cd /etc/zabbix/zabbix_agent2.d/plugins.d/` и скопировать в неё необходимые UserParameters.conf-файлы ('netmath.conf') по образцу из сконфигурированной системы
 - Изменить `SID` и `NR` в `netmath.conf` при необходимости
 - Обновить дату изменения всех *.conf файлов с помощью команды `touh <filename>`
 - Растиражировать файл `/etc/sudoers/grzabbix` с сконфигурированной системы, изменив `SID`, `sidadm` и `NR` при необходимости
 
-# Шаг 5: Конфигурация PSK на хосте
+# Шаг 4: Конфигурация PSK на хосте
 - Создать файл с ключом шифрования `touch /etc/zabbix/tls.psk`; `echo <key> > /etc/zabbix/tls.psk`
 - Изменить полномочия файла с ключом `chmod 400 /etc/zabbix/tls.psk`; `chown zabbix:zabbix /etc/zabbix/tls.psk`
 - Добавить файл конфигурации psk:
@@ -62,9 +62,9 @@ TLSPSKIdentity=<psk_id>
 TLSPSKFile=/etc/zabbix/tls.psk 
 ```
 
-# Шаг 6: Запуск агента
+# Шаг 5: Запуск агента
 - Запуск агента `systemctl start zabbix-agent2.service`
 - Автозапуск агента `systemctl enable zabbix-agent2.service`
 
-# Шаг 7: Конфигурация хоста со стороны сервера Zabbix
+# Шаг 6: Конфигурация хоста со стороны сервера Zabbix
 Сконфигурировать хост в веб-интерфейсе Zabbix, добавив psk шифрование, шаблон netmath_monitor, а также стандартные шаблоны для Linux по образцу сконфигурированных хостов.
